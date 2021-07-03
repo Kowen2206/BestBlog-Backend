@@ -1,0 +1,34 @@
+{
+  "name": "ollamia",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "set DEBUG=app:*&& set NODE_ENV=development && nodemon index",
+    "start": "set NODE_ENV=production && node index",
+    "test": "set NODE_ENV=development && mocha --exit",
+    "mocks": "set DEBUG=app:*&& set NODE_ENV=development && node scripts/mongo/seedArticles.js",
+    "mocksKeys": "set DEBUG=app:*&& set NODE_ENV=development && node scripts/mongo/seedApiKeys",
+    "mocksUsers": "set DEBUG=app:*&& set NODE_ENV=development && node scripts/mongo/seedUsers.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/boom": "^9.1.2",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "^4.4.1",
+    "joi": "^17.4.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^3.6.5",
+    "multer": "^1.4.2",
+    "nodemon": "^2.0.7",
+    "passport": "^0.4.1",
+    "passport-http": "^0.3.0",
+    "passport-jwt": "^4.0.0"
+  },
+  "devDependencies": {
+    "chalk": "^4.1.0"
+  }
+}
