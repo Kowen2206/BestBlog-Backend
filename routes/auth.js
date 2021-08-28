@@ -58,14 +58,16 @@ function authApi(app){
     //esta ruta valida que el body del request contenga un api-key valido, un usuario y contraseña.
     //Usa un custom callback para antes de ejecutar la estrategia basic poder acceder al req.body y validar que contenga un apiKeyToken
     router.post('/sign-in', async function (req, res, next) {
-        console.log("llego?")
         const { apiKeyToken} = req.body;
+        console.log('--------------------------------------------BODY-----------------------------------------------');
+        console.log(req.body);
         if(!apiKeyToken){
-            next(boom.unauthorized('apiKeyToken is requerid'));
+            next(boom.unauthorized('ApiKeyToken is requerid'));
         }
 
         passport.authenticate('basic', function (err, user) {
             try{
+
                 if(err || !user){
                     next(boom.unauthorized());
                 } 
@@ -77,9 +79,11 @@ function authApi(app){
 
                     const apiKey = await apiKeysService.getApiKey({token: apiKeyToken});
                     if(!apiKey){
-                        console.log(apiKey + "---------------------------------------------------------------------------------------------");
                         next(boom.unauthorized());
                     }
+
+                    console.log('---------------------user-----------------');
+                    console.log(user);
 
                     const {_id: id, name, email, photo} = user;
                     const payload = {
@@ -108,10 +112,16 @@ function authApi(app){
         console.log(user);
         try{
             const createdUserId = await userService.createUser({user});
-            res.status(200).json({
-                data: createdUserId,
-                message: 'User created'
-            });
+            console.log(createdUserId);
+            if(createdUserId !== null){
+                res.status(200).json({
+                    data: createdUserId,
+                    message: 'User created'
+                });
+            }else{
+                next(boom.badRequest("El nombre de usuario o correo ya han sido registrados"));
+            }
+            
 
         }catch(err){
             next(err);
@@ -126,7 +136,7 @@ function authApi(app){
         const {apiKeyToken, ...user} = body;
 
         if(!apiKeyToken){
-            next(boom.unauthorized("IpKeyToken is required"));
+            next(boom.unauthorized("APIKeyToken is required"));
         }
 
         try {
@@ -153,8 +163,6 @@ function authApi(app){
         } catch (error) {
             next(err);
         }
-
-
     })
     
 }

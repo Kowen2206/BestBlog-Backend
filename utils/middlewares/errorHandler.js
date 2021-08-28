@@ -14,6 +14,7 @@ function withErrorStack(error, stack){
 
 //middleware encargado de mostrar el error en un console.log
 function logErrors(err, req, res, next){
+    console.log('error handler');
     console.log(err);
     next(err);
 }
@@ -29,9 +30,7 @@ function wrapErrors(){
 //middleware encargado de manejar el error
 //Usa la sintaxis para manejar errores con expres err,req,res,next
 function errorHandler(err, req, res, next){ 
-    //PENDIENTE RERALIZAE UN CONSOLE.LOG 
     const{ output: {statusCode, payload}} = err;
-    console.log("unautorized??");
     res.status(statusCode);
     //res.json se encarga de darnos la respuesta en formato json, ya que por defecto esta viene en html.
     //ejecuta el metodo withErrorStack el cual decide si se trata de un error boom.

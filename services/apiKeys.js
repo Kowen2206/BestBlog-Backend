@@ -7,7 +7,7 @@ class ApiKeysService{
     }
 
     async getApiKey({ token }){
-        console.log("TOKEN SSR------------" + token)
+        console.log("TOKEN SSR------------" + token);
         const [apiKey] = await this.mongoDB.getAll(this.collection, { token });
         return apiKey;
     }

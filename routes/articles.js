@@ -62,16 +62,18 @@ function articlesApi(app) {
         }
     });
 
+
+    //oportunidades, mejorar la validacion haciendo una consulta del articulo y compararlo con los datos de usuario del nuevo antes de actualizarlo
     router.put("/:articleId", validationHandler({ articleId: articleIdSchema }, 'params'), validationHandler(updateArticleSchema), async (req, res, next) => {
         const { body: article } = req;
         const { articleId } = req.params;
-
+        console.log("route update")
         try {
             await articleServices.Updatearticle({ articleId, article });
             res.status(200).json({
                 data: articleId,
                 message: "Article upadated"
-            })
+            });
         } catch (err) {
             next(err);
         }

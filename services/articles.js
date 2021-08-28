@@ -3,12 +3,9 @@ const MongoLib = require('../lib/mongo.js');
 class ArticlesService {
 
    constructor() {
-
       this.collection = 'articles';
       this.mongoDB = new MongoLib();
-
    }
-
 
    async getArticles({ tags }) {
       const query = tags && {UserId: tags};
@@ -27,6 +24,7 @@ class ArticlesService {
    }
 
    async Updatearticle({ articleId, article }) {
+      console.log("update article");
       const updateArticleId = await this.mongoDB.update(this.collection, articleId, article);
       return updateArticleId || [];
    }
