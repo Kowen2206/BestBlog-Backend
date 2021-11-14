@@ -7,15 +7,19 @@ class ArticlesService {
       this.mongoDB = new MongoLib();
    }
 
-   async getArticles({ tags }) {
-      const query = tags && {UserId: tags};
+   async getArticles({ tags, UserId = false }) {
+      console.log('UserId');
+      console.log(UserId);
+      const query = {$or: [{Status: 'private', UserId}, {Status: 'public'}]}
       const articles = await this.mongoDB.getAll(this.collection, query);
       return articles || [];
    }
 
-   async getArticle({ articleId }) {
-      const article = await this.mongoDB.get(this.collection, articleId);
-      return article || [];
+   //Añadir logica de consulta para trae un articulo mediante un query mas complejo
+   async getArticle({ ArticleId, UserId }) {
+      const query = {_id: ArticleId, $or :[{ Status: 'private', UserId }, {Status: 'public'}]};
+      const publicArticle = await this.mongoDB.getWithQuey(this.collection, query);
+      return publicArticle || [];
    }
 
    async createArticle({ article }) {
@@ -24,7 +28,6 @@ class ArticlesService {
    }
 
    async Updatearticle({ articleId, article }) {
-      console.log("update article");
       const updateArticleId = await this.mongoDB.update(this.collection, articleId, article);
       return updateArticleId || [];
    }

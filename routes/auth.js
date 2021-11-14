@@ -119,7 +119,7 @@ function authApi(app){
                     message: 'User created'
                 });
             }else{
-                next(boom.badRequest("El nombre de usuario o correo ya han sido registrados"));
+                next(boom.badRequest("El nombre de usuario o correo ya ha sido registrado"));
             }
             
 

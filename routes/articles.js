@@ -11,7 +11,7 @@ const {
     deleteArticleSchema,
 } = require("../utils/schemas/articles");
 
-require('../utils/auth/strategies/jwt')
+require('../utils/auth/strategies/jwt');
 
 function articlesApi(app) {
     const router = express.Router();
@@ -19,12 +19,17 @@ function articlesApi(app) {
 
     const articleServices = new ArticleServices();
 
+    //Existen 3 casos de uso para get articles:
+    // 1- Get All conseguir todos los articulos publicos, 
+    //y si se manda un userId, también los privados que coincidan con el userId
+    //2-Get one consigue un articulo si este es publico, o si este coincide con el userId enviado, si es que se envia un userId.
+    //3-Get con tags, filtra el articulo con tags
+
     // passport.authenticate('jwt', {session: false}) , scopesValidationHandler(["read:articles"])
     router.get("/", async (req, res, next) => {
-        const { tags } = req.query;
-      
+        const { tags, UserId } = req.body;
         try {
-            const articles = await articleServices.getArticles({ tags });
+            const articles = await articleServices.getArticles({ tags, UserId });
             res.status(200).json({
                 data: articles,
                 message: 'articles listed'
@@ -34,10 +39,26 @@ function articlesApi(app) {
         }
     });
 
-    router.get("/:articleId", validationHandler({ articleId: articleIdSchema }, 'params'), async (req, res, next) => {
-        const { articleId } = req.params;
+    router.get("/user", async (req, res, next) => {
+        const { tags, UserId } = req.body;
+      
         try {
-            const article = await articleServices.getArticle({ articleId });
+            const articles = await articleServices.getArticles({ tags, UserId });
+            res.status(200).json({
+                data: articles,
+                message: 'articles listed'
+            });
+        } catch (err) {
+            next(err);
+        }
+    });
+
+    router.get("/getOne", async (req, res, next) => {
+        const { ArticleId, UserId } = req.body;
+        console.log('req.body');
+        console.log(req.body);
+        try {
+            const article = await articleServices.getArticle({ ArticleId, UserId });
             res.status(200).json({
                 data: article,
                 message: 'article listed'
@@ -62,12 +83,9 @@ function articlesApi(app) {
         }
     });
 
-
-    //oportunidades, mejorar la validacion haciendo una consulta del articulo y compararlo con los datos de usuario del nuevo antes de actualizarlo
     router.put("/:articleId", validationHandler({ articleId: articleIdSchema }, 'params'), validationHandler(updateArticleSchema), async (req, res, next) => {
         const { body: article } = req;
         const { articleId } = req.params;
-        console.log("route update")
         try {
             await articleServices.Updatearticle({ articleId, article });
             res.status(200).json({

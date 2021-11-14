@@ -11,6 +11,7 @@ const articleTagsSchema = joi.string();
 const articleUserNameAutorSchema = joi.string().max(30);
 const articleUserPhotoAutorSchema = joi.string().uri();
 const articleUserIdSchema = joi.string();
+const articleStatusSchema = joi.string();
 
 
 //const {articleIdSchema} = require("./articles");
@@ -26,7 +27,8 @@ const createArticleSchema = {
     ArticlePhoto: articleArticlePhotoSchema,
     tags: articleTagsSchema,
     UserPhoto: articleUserPhotoAutorSchema,
-    UserId: articleUserIdSchema
+    UserId: articleUserIdSchema,
+    Status: articleStatusSchema.required(),
 }
 
 const updateArticleSchema = {
@@ -37,7 +39,8 @@ const updateArticleSchema = {
     Date: articleDateSchema.required(),
     ArticlePhoto: articleArticlePhotoSchema.required(),
     tags: articleTagsSchema,
-    UserPhoto: articleUserPhotoAutorSchema
+    UserPhoto: articleUserPhotoAutorSchema,
+    Status: articleStatusSchema.required(),
 }
 
 const deleteArticleSchema ={
