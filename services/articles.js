@@ -8,9 +8,11 @@ class ArticlesService {
    }
 
    async getArticles({ tags, UserId = false }) {
-      console.log('UserId');
       console.log(UserId);
-      const query = {$or: [{Status: 'private', UserId}, {Status: 'public'}]}
+      const query = tags? 
+      {tags, $or: [{Status: 'private', UserId}, {Status: 'public'}]}
+      : 
+      {$or: [{Status: 'private', UserId}, {Status: 'public'}]}
       const articles = await this.mongoDB.getAll(this.collection, query);
       return articles || [];
    }

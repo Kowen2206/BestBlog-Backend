@@ -23,7 +23,7 @@ function users(app) {
     router.put('/:id', verifyPassword(),async (req, res, next)=>{
         const data = req.body;
         const newPassword  = data.newPassword;
-        console.log(data);
+        //console.log(data);
         const {id} = req.params;
         newPassword? data.password =  await bcryp.hash(newPassword, 10) : null;
         delete newPassword;
@@ -41,12 +41,12 @@ function users(app) {
 
     router.get('/:id', async(req, res, next) =>{
         const {id} = req.params;
-        console.log("id")
-        console.log(req.params)
+        //console.log("id")
+        //console.log(req.params)
         const userData = await userService.getUserById(id)
-        console.log("User-Data");
-        console.log("User-Datas");
-        console.log(userData);
+        //console.log("User-Data");
+        //console.log("User-Datas");
+        //console.log(userData);
         res.status(200).json({
             data: userData,
             message: 'user listed'

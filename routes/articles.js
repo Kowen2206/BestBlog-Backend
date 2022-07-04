@@ -1,4 +1,5 @@
 const express = require("express");
+const { use } = require("passport");
 const passport = require("passport");
 const ArticleServices = require("../services/articles");
 const scopesValidationHandler = require("../utils/middlewares/scopesValidationHandler");
@@ -27,9 +28,9 @@ function articlesApi(app) {
 
     // passport.authenticate('jwt', {session: false}) , scopesValidationHandler(["read:articles"])
     router.get("/", async (req, res, next) => {
-        const { tags, UserId } = req.body;
+        const { UserId } = req.body;
         try {
-            const articles = await articleServices.getArticles({ tags, UserId });
+            const articles = await articleServices.getArticles({ UserId });
             res.status(200).json({
                 data: articles,
                 message: 'articles listed'
@@ -39,11 +40,11 @@ function articlesApi(app) {
         }
     });
 
-    router.get("/user", async (req, res, next) => {
-        const { tags, UserId } = req.body;
-      
+    router.get("/user/:id", async (req, res, next) => {
+        const {id} = req.params;
+        const { tags } = req.body;
         try {
-            const articles = await articleServices.getArticles({ tags, UserId });
+            const articles = await articleServices.getArticles({ tags, UserId: id });
             res.status(200).json({
                 data: articles,
                 message: 'articles listed'
@@ -55,8 +56,6 @@ function articlesApi(app) {
 
     router.get("/getOne", async (req, res, next) => {
         const { ArticleId, UserId } = req.body;
-        console.log('req.body');
-        console.log(req.body);
         try {
             const article = await articleServices.getArticle({ ArticleId, UserId });
             res.status(200).json({
